@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Dashboard</title>
+    <style>
+        body {
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+            font-family: Arial, sans-serif;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 {
+            margin: 20px;
+        }
+        .search-container {
+            margin-bottom: 20px;
+        }
+        input[type="text"] {
+            padding: 10px;
+            width: 300px;
+            border: none;
+            border-radius: 5px;
+        }
+        .weather-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            width: 100%;
+        }
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .card h2 {
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Weather Dashboard</h1>
+    <div class="search-container">
+        <input type="text" id="location" placeholder="Enter a location">
+        <button onclick="fetchWeather()">Search</button>
+    </div>
+    <div class="weather-cards" id="weatherCards"></div>
+
+    <script>
+        async function fetchWeather() {
+            const location = document.getElementById('location').value;
+            const currentWeatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=35.6895&longitude=139.6917&current_weather=true`;
+            // Replace with actual latitude and longitude for the searched location
+
+            try {
+                const response = await fetch(currentWeatherUrl);
+                const data = await response.json();
+                displayWeather(data);
+            } catch (error) {
+                console.error('Error fetching weather data:', error);
+            }
+        }
+
+        function displayWeather(data) {
+            const weatherCards = document.getElementById('weatherCards');
+            weatherCards.innerHTML = '';
+
+            const currentWeather = data.current_weather;
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML = `<h2>Current Weather</h2><p>Temperature: ${currentWeather.temperature}°C</p><p>Wind Speed: ${currentWeather.windspeed} km/h</p>`;
+            weatherCards.appendChild(card);
+            // Add forecast display as needed
+        }
+
+        // You can add a function to fetch the 7-day forecast similarly
+    </script>
+</body>
+</html>
